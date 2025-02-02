@@ -14,8 +14,9 @@ class ContactsRepository {
       return row;
   }
 
-  async findAll() {
-    const rows = await db.executeQuery('SELECT * FROM contacts');
+  async findAll(orderBy = 'ASC') {
+    const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    const rows = await db.executeQuery(`SELECT * FROM contacts ORDER BY name ${direction}`);
     return rows;
   }
 
@@ -30,14 +31,14 @@ class ContactsRepository {
   }
 
   update(id, {
-    name, email, telefone, category_id
+    name, email, phone, category_id
   }) {
     return new Promise((resolve) => {
       const updatedContact = {
         id,
         name,
         email,
-        telefone,
+        phone,
         category_id
       };
 

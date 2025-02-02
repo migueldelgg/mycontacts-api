@@ -1,8 +1,10 @@
 import ContactsRepository from '../repositories/ContactsRepository.js';
 
 class ContractController {
-  async index(_req, res) {
-    const contacts = await ContactsRepository.findAll();
+  async index(req, res) {
+    const { orderBy } = req.query;
+    const contacts = await ContactsRepository.findAll(orderBy);
+
     res.json(contacts);
   }
 
@@ -40,7 +42,7 @@ class ContractController {
 
   async update(req, res) {
     const { id } = req.params;
-    const { name, email, telefone, category_id } = req.body;
+    const { name, email, phone, category_id } = req.body;
 
     const contactExist = await ContactsRepository.findById(id);
     if (!contactExist) {
@@ -59,7 +61,7 @@ class ContractController {
     }
 
     const contact = await ContactsRepository.update(id, {
-      name, email, telefone, category_id
+      name, email, phone, category_id
     });
 
     res.json(contact);
