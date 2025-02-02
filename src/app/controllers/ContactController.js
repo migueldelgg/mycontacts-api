@@ -4,9 +4,8 @@ class ContractController {
   async index(req, res) {
     const { orderBy } = req.query;
     const contacts = await ContactsRepository.findAll(orderBy);
-
     res.json(contacts);
-  }
+  };
 
   async show(req, res) {
     const { id } = req.params;
@@ -19,7 +18,7 @@ class ContractController {
     }
 
     res.json(contact);
-  }
+  };
 
   async store(req, res) {
     const { name, email, phone, category_id } = req.body;
@@ -29,7 +28,7 @@ class ContractController {
     }
 
     const contactExist = await ContactsRepository.findByEmail(email);
-    if(contactExist) {
+    if (contactExist) {
       return res.status(400).json({ error: `${email} already exists in data base` })
     }
 
@@ -38,7 +37,7 @@ class ContractController {
     });
 
     res.json(contact);
-  }
+  };
 
   async update(req, res) {
     const { id } = req.params;
@@ -56,7 +55,7 @@ class ContractController {
     }
 
     const contactByEmail = await ContactsRepository.findByEmail(email);
-    if(contactByEmail && contactByEmail.id !== id) {
+    if (contactByEmail && contactByEmail.id !== id) {
       return res.status(400).json({ error: `${email} already exists in data base` })
     }
 
@@ -65,21 +64,19 @@ class ContractController {
     });
 
     res.json(contact);
-  }
+  };
 
   async delete(req, res) {
     const { id } = req.params;
 
     const contact = await ContactsRepository.findById(id);
     if (!contact) {
-      return res.status(404).json({
-        message: `${id} Not Found in data source`,
-      });
+      return res.status(404).json({ error: `User not found` });
     }
 
     await ContactsRepository.delete(id);
     res.sendStatus(204);
-  }
+  };
 }
 
 // Singleton

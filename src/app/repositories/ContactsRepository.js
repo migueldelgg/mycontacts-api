@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import db from '../../database/index.js';
 
 class ContactsRepository {
@@ -30,33 +29,23 @@ class ContactsRepository {
     return row;
   }
 
-  update(id, {
+  async update(id, {
     name, email, phone, category_id
   }) {
-    return new Promise((resolve) => {
-      const updatedContact = {
-        id,
-        name,
-        email,
-        phone,
-        category_id
-      };
-
-    // Itera sobre contacts, compara se o id é igual; se for igual, atualiza o contato na lista
-    // Se não for igual, mantém o contato original na lista
-    contacts = contacts.map((contact) => {
-        return contact.id === id ? updatedContact : contact
-      })
-
-      resolve(updatedContact);
-    });
+    const [row] = await db.executeQuery(`
+      UPDATE contacts
+      SET name = $1, email = $2, phone = $3, category_id = $4
+      WHERE id = $5
+      RETURNING *
+      `, [name, email, phone, category_id, id]);
+   return row;
   }
 
-  delete(id) {
-    return new Promise((resolve, _reject) => {
-      contacts = contacts.filter((contact) => contact.id !== id);
-      resolve();
-    });
+  async delete(id) {
+    const deleteOp = await db.executeQuery(`
+      DELETE FROM contacts WHERE id = $1
+      `, [id])
+    return deleteOp;
   }
 }
 
