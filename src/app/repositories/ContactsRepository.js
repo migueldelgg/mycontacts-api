@@ -25,6 +25,23 @@ let contacts = [
 ];
 
 class ContactsRepository {
+  create({
+    name, email, phone, category_id
+  }) {
+    return new Promise((resolve, _reject) => {
+      const newContact = {
+        id: v4(),
+        name,
+        email,
+        phone,
+        category_id
+      };
+
+      contacts.push(newContact);
+      resolve(newContact);
+    });
+  }
+
   findAll() {
     return new Promise((resolve, _reject) => {
       resolve(contacts); // retorno implicito
@@ -39,8 +56,12 @@ class ContactsRepository {
     });
   }
 
-  store() {
-    // Criar novo registro
+  findByEmail(email) {
+    return new Promise((resolve, _reject) => {
+      resolve(
+        contacts.find((contact) => contact.email === email)
+      ); // retorno implicito
+    });
   }
 
   update() {
@@ -50,7 +71,7 @@ class ContactsRepository {
   delete(id) {
     return new Promise((resolve, _reject) => {
       contacts = contacts.filter((contact) => contact.id !== id);
-      resolve()
+      resolve();
     });
   }
 }
