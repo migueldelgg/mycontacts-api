@@ -15,6 +15,6 @@ router.get(
 router.get('/contacts/:id', ContractController.show);
 router.delete('/contacts/:id', ContractController.delete);
 router.post('/contacts', ContractController.store);
-
+router.put('/contacts/:id', ContractController.update);
 
 export default router;

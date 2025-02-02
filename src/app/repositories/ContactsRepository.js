@@ -26,14 +26,14 @@ let contacts = [
 
 class ContactsRepository {
   create({
-    name, email, phone, category_id
+    name, email, telefone, category_id
   }) {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       const newContact = {
         id: v4(),
         name,
         email,
-        phone,
+        telefone,
         category_id
       };
 
@@ -43,13 +43,13 @@ class ContactsRepository {
   }
 
   findAll() {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       resolve(contacts); // retorno implicito
     });
   }
 
   findById(id) {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve) => {
       resolve(
         contacts.find((contact) => contact.id === id)
       ); // retorno implicito
@@ -64,8 +64,26 @@ class ContactsRepository {
     });
   }
 
-  update() {
-    // Editaar registro
+  update(id, {
+    name, email, telefone, category_id
+  }) {
+    return new Promise((resolve) => {
+      const updatedContact = {
+        id,
+        name,
+        email,
+        telefone,
+        category_id
+      };
+
+    // Itera sobre contacts, compara se o id é igual; se for igual, atualiza o contato na lista
+    // Se não for igual, mantém o contato original na lista
+    contacts = contacts.map((contact) => {
+        return contact.id === id ? updatedContact : contact
+      })
+
+      resolve(updatedContact);
+    });
   }
 
   delete(id) {
