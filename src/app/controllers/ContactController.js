@@ -1,13 +1,22 @@
-class ContractController {
+import ContactsRepository from '../repositories/ContactsRepository.js';
 
-  index(req, res) {
-    res.json(({
-      message: 'Send from contact controller!'
-    }));
+class ContractController {
+  async index(_req, res) {
+    const contacts = await ContactsRepository.findAll();
+    res.json(contacts);
   }
 
-  show() {
-    // Obter um registro
+  async show(req, res) {
+    const { id } = req.params;
+    const contact = await ContactsRepository.findById(id);
+
+    if (!contact) {
+      return res.status(404).json({
+        message: `${id} Not Found in data source`,
+      });
+    }
+
+    res.json(contact);
   }
 
   store() {
@@ -18,8 +27,19 @@ class ContractController {
     // Editaar registro
   }
 
-  delete() {
-    // Excluir registro
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const contact = await ContactsRepository.findById(id);
+
+    if (!contact) {
+      return res.status(404).json({
+        message: `${id} Not Found in data source`,
+      });
+    }
+
+    await ContactsRepository.delete(id);
+    res.sendStatus(204);
   }
 }
 
