@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: miguel
+      POSTGRES_DB: mycontacts_db
+    volumes:
+      - polls_pg_data:/bitnami/postgresql
+    container_name: mycontacts
+
+volumes:
+  polls_pg_data:
