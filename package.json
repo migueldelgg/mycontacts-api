@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
+    "mycontacts-api": "file:",
     "uuid": "^11.0.5"
   },
   "devDependencies": {
