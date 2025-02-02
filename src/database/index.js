@@ -36,4 +36,10 @@ export const executeQuery = async (query, params = []) => {
   }
 };
 
+const db = {
+  executeQuery
+};
+
+export default db;
+
 testConnection();

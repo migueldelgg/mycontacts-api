@@ -1,67 +1,32 @@
-import { v4 } from 'uuid'
-
-let contacts = [
-  {
-    id: v4(),
-    name: 'Matheus',
-    email: 'matheus@gmail.com',
-    telefone: '5511981287897',
-    category_id: v4()
-  },
-  {
-    id: v4(),
-    name: 'Miguel',
-    email: 'miguel@gmail.com',
-    telefone: '5511998765432',
-    category_id: v4()
-  },
-  {
-    id: v4(),
-    name: 'Ana',
-    email: 'ana@gmail.com',
-    telefone: '5511945678901',
-    category_id: v4()
-  }
-];
+import { v4 } from 'uuid';
+import db from '../../database/index.js';
 
 class ContactsRepository {
-  create({
-    name, email, telefone, category_id
+  async create({
+    name, email, phone, category_id
   }) {
-    return new Promise((resolve) => {
-      const newContact = {
-        id: v4(),
-        name,
-        email,
-        telefone,
-        category_id
-      };
+    const [row] = await db.executeQuery(`
+      INSERT INTO contacts(name, email, phone, category_id)
+      VALUES($1, $2, $3, $4)
+      RETURNING *
+      `, [name, email, phone, category_id]);
 
-      contacts.push(newContact);
-      resolve(newContact);
-    });
+      return row;
   }
 
-  findAll() {
-    return new Promise((resolve) => {
-      resolve(contacts); // retorno implicito
-    });
+  async findAll() {
+    const rows = await db.executeQuery('SELECT * FROM contacts');
+    return rows;
   }
 
-  findById(id) {
-    return new Promise((resolve) => {
-      resolve(
-        contacts.find((contact) => contact.id === id)
-      ); // retorno implicito
-    });
+  async findById(id) {
+    const [row] = await db.executeQuery('SELECT * FROM contacts WHERE id = $1', [id]);
+    return row;
   }
 
-  findByEmail(email) {
-    return new Promise((resolve, _reject) => {
-      resolve(
-        contacts.find((contact) => contact.email === email)
-      ); // retorno implicito
-    });
+  async findByEmail(email) {
+    const [row] = await db.executeQuery('SELECT * FROM contacts WHERE email = $1', [email]);
+    return row;
   }
 
   update(id, {

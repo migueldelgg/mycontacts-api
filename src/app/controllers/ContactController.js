@@ -20,7 +20,7 @@ class ContractController {
   }
 
   async store(req, res) {
-    const { name, email, telefone, category_id } = req.body;
+    const { name, email, phone, category_id } = req.body;
 
     if (!name) {
       return res.status(400).json({ error: `The property "name" is required` })
@@ -32,7 +32,7 @@ class ContractController {
     }
 
     const contact = await ContactsRepository.create({
-      name, email, telefone, category_id
+      name, email, phone, category_id
     });
 
     res.json(contact);
