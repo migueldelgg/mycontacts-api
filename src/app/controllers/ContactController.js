@@ -9,14 +9,15 @@ class ContractController {
 
   async show(req, res) {
     const { id } = req.params;
-
+    if (!validator.isUUID(id)) {
+      return res.status(400).json({ message: "Invalid UUID format" });
+    }
     const contact = await ContactsRepository.findById(id);
     if (!contact) {
       return res.status(404).json({
         message: `${id} Not Found in data source`,
       });
     }
-
     res.json(contact);
   };
 
