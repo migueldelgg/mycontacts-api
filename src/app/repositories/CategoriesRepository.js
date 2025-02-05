@@ -11,6 +11,16 @@ class CategoryRepository {
     return row;
   }
 
+  async update(id, { name }) {
+    const [row] = await db.executeQuery(`
+      UPDATE categories
+      SET name = $1
+      WHERE id = $2
+      RETURNING *
+      `, [name, id]);
+    return row;
+  }
+
   async findAll() {
     const rows = await db.executeQuery(`
         SELECT * FROM categories ORDER BY name
@@ -22,16 +32,6 @@ class CategoryRepository {
     console.log(`id capturado na funcao findById: ${id}`)
     const [row] = await db.executeQuery('SELECT * FROM categories WHERE id = $1', [id]);
     console.log(`row retorno: ${row}`)
-    return row;
-  }
-
-  async update(id, { name }) {
-    const [row] = await db.executeQuery(`
-      UPDATE categories
-      SET name = $1
-      WHERE id = $2
-      RETURNING *
-      `, [name, id]);
     return row;
   }
 

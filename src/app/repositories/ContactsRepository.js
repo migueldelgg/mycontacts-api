@@ -13,6 +13,18 @@ class ContactsRepository {
     return row;
   }
 
+  async update(id, {
+    name, email, phone, category_id
+  }) {
+    const [row] = await db.executeQuery(`
+      UPDATE contacts
+      SET name = $1, email = $2, phone = $3, category_id = $4
+      WHERE id = $5
+      RETURNING *
+      `, [name, email, phone, category_id, id]);
+    return row;
+  }
+
   async findAll(orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.executeQuery(`SELECT * FROM contacts ORDER BY name ${direction}`);
@@ -26,18 +38,6 @@ class ContactsRepository {
 
   async findByEmail(email) {
     const [row] = await db.executeQuery('SELECT * FROM contacts WHERE email = $1', [email]);
-    return row;
-  }
-
-  async update(id, {
-    name, email, phone, category_id
-  }) {
-    const [row] = await db.executeQuery(`
-      UPDATE contacts
-      SET name = $1, email = $2, phone = $3, category_id = $4
-      WHERE id = $5
-      RETURNING *
-      `, [name, email, phone, category_id, id]);
     return row;
   }
 
