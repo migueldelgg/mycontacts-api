@@ -1,6 +1,7 @@
 import db from '../../database/index.js';
 
 class CategoryRepository {
+
   async create({ name }) {
     const [row] = await db.executeQuery(`
       INSERT INTO categories(name)

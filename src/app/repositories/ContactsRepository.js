@@ -27,12 +27,26 @@ class ContactsRepository {
 
   async findAll(orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-    const rows = await db.executeQuery(`SELECT * FROM contacts ORDER BY name ${direction}`);
+    const rows = await db.executeQuery(`
+      SELECT
+        contacts.*,
+        categories.name AS category_name
+      FROM contacts
+      LEFT JOIN categories ON contacts.category_id = categories.id
+      ORDER BY name ${direction};
+      `)
     return rows;
   }
 
   async findById(id) {
-    const [row] = await db.executeQuery('SELECT * FROM contacts WHERE id = $1', [id]);
+    const [row] = await db.executeQuery(`
+      SELECT
+        contacts.*,
+        categories.name AS category_name
+      FROM contacts
+      LEFT JOIN categories ON contacts.category_id = categories.id
+      WHERE contacts.id = $1;
+      `, [id])
     return row;
   }
 
