@@ -24,6 +24,23 @@ class CategoryRepository {
     console.log(`row retorno: ${row}`)
     return row;
   }
+
+  async update(id, { name }) {
+    const [row] = await db.executeQuery(`
+      UPDATE categories
+      SET name = $1
+      WHERE id = $2
+      RETURNING *
+      `, [name, id]);
+    return row;
+  }
+
+  async delete(id) {
+    const deleteOp = await db.executeQuery(`
+      DELETE FROM categories WHERE id = $1
+      `, [id])
+    return deleteOp;
+  }
 }
 
 export default new CategoryRepository();

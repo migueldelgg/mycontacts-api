@@ -1,4 +1,5 @@
 import ContactsRepository from '../repositories/ContactsRepository.js';
+import validator from 'validator';
 
 class ContractController {
   async index(req, res) {
@@ -42,6 +43,9 @@ class ContractController {
 
   async update(req, res) {
     const { id } = req.params;
+    if (!validator.isUUID(id)) {
+      return res.status(400).json({ message: "Invalid UUID format" });
+    }
     const { name, email, phone, category_id } = req.body;
 
     const contactExist = await ContactsRepository.findById(id);
@@ -69,10 +73,13 @@ class ContractController {
 
   async delete(req, res) {
     const { id } = req.params;
+    if (!validator.isUUID(id)) {
+      return res.status(400).json({ message: "Invalid UUID format" });
+    }
 
     const contact = await ContactsRepository.findById(id);
     if (!contact) {
-      return res.status(404).json({ error: `User not found` });
+      return res.status(404).json({ error: `Contact not found` });
     }
 
     await ContactsRepository.delete(id);

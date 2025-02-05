@@ -10,7 +10,7 @@ class ContactsRepository {
       RETURNING *
       `, [name, email, phone, category_id]);
 
-      return row;
+    return row;
   }
 
   async findAll(orderBy = 'ASC') {
@@ -38,7 +38,7 @@ class ContactsRepository {
       WHERE id = $5
       RETURNING *
       `, [name, email, phone, category_id, id]);
-   return row;
+    return row;
   }
 
   async delete(id) {
