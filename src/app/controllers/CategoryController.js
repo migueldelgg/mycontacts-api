@@ -3,9 +3,9 @@ import validator from 'validator';
 
 class CategoryController {
 
-  async index(_req, res) {
+  async index(request, response) {
     const categories = await CategoryRepository.findAll();
-    return res.json(categories);
+    return response.json(categories);
   }
 
   async show(req, res) {
